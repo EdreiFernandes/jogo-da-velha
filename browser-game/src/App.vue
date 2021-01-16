@@ -1,28 +1,168 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="position-absolute d-table w-100 h-100">
+        <div class="d-table-cell align-middle">
+            <div class="container w-board text-center">
+                <div id="cabealho" class="row justify-content-between mb-5">
+                    <a class="text-warning" data-toggle="modal" data-target="#placarModal" title="Placar">
+                        <i class="fas fa-trophy"></i>
+                    </a>
+                    <div class="text-warning">vez do<h2><b>Jogador 1</b></h2></div>
+                    <a class="text-warning" data-toggle="modal" data-target="#menuModal" title="Menu">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                </div>
+
+                <div id="game-board" class="row text-tiktaktoe text-warning">
+                    <div class="col-4 border-bottom border-right border-warning text-dark">
+                        N
+                    </div>
+                    <div class="col-4 border-bottom border-right border-left border-warning">
+                    </div>
+                    <div class="col-4 border-bottom border-left border-warning">
+                        X
+                    </div>
+                    <div class="col-4 border-bottom border-right border-top border-warning text-dark">
+                        N
+                    </div>
+                    <div class="col-4 border border-warning">
+                    </div>
+                    <div class="col-4 border-bottom border-top border-left border-warning">
+                    </div>
+                    <div class="col-4 border-right border-top border-warning text-dark">
+                        N
+                    </div>
+                    <div class="col-4 border-right border-top border-left border-warning">
+                        O
+                    </div>
+                    <div class="col-4 border-top border-left border-warning">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="resultadoModal" tabindex="-1" role="dialog"
+        aria-labelledby="resultadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-warning">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-10">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+    
+                        <div class="modal-body text-center">
+                            <h2>Deu velha!</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="placarModal" tabindex="-1" role="dialog"
+        aria-labelledby="placarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-warning">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-10">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Placar</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+    
+                        <div class="modal-body">
+                            <div class="row text-center">
+                                <div id="jogador-1" class="col-5">
+                                    <h4>Jogador 1</h4>
+                                    <h1>4</h1>
+                                    <h6>vitórias</h6>
+                                </div>
+                                <h2 class="col-2 mt-5"><b>X</b></h2>
+                                <div id="jogador-2" class="col-5">
+                                    <h4>Jogador 2</h4>
+                                    <h1>2</h1>
+                                    <h6>vitórias</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-warning">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-10">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Menu</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-outline-dark btn-block" data-dismiss="modal">Jogar</button>
+                            <button type="button" class="btn btn-outline-dark btn-block">Reiniciar</button>
+                            <button type="button" class="btn btn-outline-dark btn-block" data-dismiss="modal" data-toggle="modal" data-target="#placarModal">
+                                Placar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
   components: {
-    HelloWorld
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.w-board {
+  width: 45%;
 }
+
+.text-tiktaktoe {
+  font-size: 6rem;
+}
+
+.modal-dialog {
+  margin: 0;
+  max-width: 100%;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 0px;
+}
+
+.modal-header {
+  border: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .w-board {
+    width: 90%;
+  }
+  .text-tiktaktoe {
+    font-size: 3rem;
+  }
+}
+
 </style>

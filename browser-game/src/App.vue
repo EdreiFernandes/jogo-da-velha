@@ -18,7 +18,7 @@
                     <div v-for="(gamecol, colIndex) in gamerow" :key="colIndex"
                         :class="{'col-4 tiktaktoe-cell text-warning' : true,
                         'tiktaktoe-cell-middle': rowIndex == 1}">
-                        <div>N</div>
+                        <div @click="makeMove(rowIndex, colIndex)">{{ gamecol }}</div>
                     </div>
                 </div>
             </div>
@@ -116,12 +116,25 @@ export default {
   data() {
       return {
           playerTurn: 1,
-
-          //   player: [{id: 1, symbol: 'X', victories: 0},{id: 1, symbol: 'O', victories: 0}],
-      gameboard: [
+          gameboard: [
           ['N','N','N'],
           ['N','N','N'],
-          ['N','N','N']]
+          ['N','N','N']],
+          player: [
+              {symbol: 'X', victories: 0},
+              {symbol: 'O', victories: 0}],
+      }
+  },
+  methods: {
+      makeMove(row, col) {
+          if(this.gameboard[row][col] == 'N'){
+              this.gameboard[row][col] = this.player[this.playerTurn - 1].symbol;
+              this.checkVictory();
+              this.playerTurn = this.playerTurn == 1 ? 2 : 1;
+          }
+      },
+      checkVictory(){
+          console.log("GG");
       }
   },
 }
@@ -144,6 +157,10 @@ export default {
 .tiktaktoe .tiktaktoe-cell-middle {
   border-top: solid 3px;
   border-bottom: solid 3px;
+}
+
+.tiktaktoe .tiktaktoe-cell:hover {
+  background-color: #2a2e33;
 }
 
 .modal-dialog {

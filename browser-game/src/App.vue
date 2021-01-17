@@ -2,16 +2,8 @@
   <div id="app">
     <div class="position-absolute d-table w-100 h-100">
         <div class="d-table-cell align-middle">
-            <div class="container w-board text-center">
-                <div id="cabealho" class="row justify-content-between mb-5">
-                    <a class="text-warning" data-toggle="modal" data-target="#placarModal" title="Placar">
-                        <i class="fas fa-trophy"></i>
-                    </a>
-                    <div class="text-warning">vez do<h2><b>Jogador {{ playerTurn }}</b></h2></div>
-                    <a class="text-warning" data-toggle="modal" data-target="#menuModal" title="Menu">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                </div>
+            <div v-if="playing" id="gameboard" class="container w-board text-center">                
+                <Header :playerTurn="playerTurn"></Header>
 
                 <div v-for="(gamerow, rowIndex) in gameboard" :key="rowIndex"
                     class="row tiktaktoe">
@@ -22,24 +14,15 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="modal fade" data-backdrop="static" id="resultadoModal" tabindex="-1" role="dialog"
-        aria-labelledby="resultadoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content bg-warning">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-10">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-    
-                        <div class="modal-body text-center">
-                            <h2>Deu velha!</h2>
-                        </div>
+            <div v-else id="menu" class="bg-warning">
+                <div class="d-flex justify-content-center">
+                    <div class="row col-sm-7 my-5 justify-content-between">
+                        <h2 class="col-10 text-center">{{ result }}</h2>
+
+                        <button type="buttom" class="btn btn-warning col-1" @click="hideMenu()">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -109,13 +92,18 @@
 </template>
 
 <script>
+import Header from '@/components/Header.vue';
+
 export default {
   name: 'App',
-  components: {    
+  components: {   
+      Header 
   },
   data() {
       return {
+          playing: false,
           playerTurn: 1,
+          result: "Deu velha!",
           gameboard: [
           ['N','N','N'],
           ['N','N','N'],
@@ -130,9 +118,14 @@ export default {
           if(this.gameboard[row][col] == 'N'){
               this.gameboard[row][col] = this.player[this.playerTurn - 1].symbol;
               if(this.checkVictory()){
-                  alert("Player " + this.playerTurn + " Ganhou");
+                  this.result = "Player " + this.playerTurn + " ganhou!";
+                  this.showMenu();
+              }else if(this.checkDraw()){
+                  this.result = "Deu velha!";
+                  this.showMenu();
+              } else {
+                  this.playerTurn = this.playerTurn == 1 ? 2 : 1;
               }
-              this.playerTurn = this.playerTurn == 1 ? 2 : 1;
           }
       },
       checkVictory(){
@@ -165,6 +158,22 @@ export default {
               }
           }          
           return false;
+      },
+      checkDraw(){
+          var emptyCells = 0;
+          for (let row = 0; row < 3; row++) {
+              for (let col = 0; col < 3; col++) {
+                  if(this.gameboard[row][col] == 'N') emptyCells++;
+              }
+          }
+
+          return emptyCells == 0;
+      },
+      showMenu(){
+          this.playing = false;
+      },
+      hideMenu(){
+          this.playing = true;
       }
   },
 }
@@ -197,20 +206,6 @@ export default {
     color: #2a2e3300;
 }
 
-.modal-dialog {
-  margin: 0;
-  max-width: 100%;
-}
-
-.modal-content {
-  border: none;
-  border-radius: 0px;
-}
-
-.modal-header {
-  border: none;
-}
-
 @media only screen and (max-width: 600px) {
   .w-board {
     width: 90%;
@@ -219,5 +214,4 @@ export default {
     font-size: 3rem;
   }
 }
-
 </style>

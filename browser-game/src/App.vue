@@ -7,35 +7,18 @@
                     <a class="text-warning" data-toggle="modal" data-target="#placarModal" title="Placar">
                         <i class="fas fa-trophy"></i>
                     </a>
-                    <div class="text-warning">vez do<h2><b>Jogador 1</b></h2></div>
+                    <div class="text-warning">vez do<h2><b>Jogador {{ playerTurn }}</b></h2></div>
                     <a class="text-warning" data-toggle="modal" data-target="#menuModal" title="Menu">
                         <i class="fas fa-ellipsis-v"></i>
                     </a>
                 </div>
 
-                <div id="game-board" class="row text-tiktaktoe text-warning">
-                    <div class="col-4 border-bottom border-right border-warning text-dark">
-                        N
-                    </div>
-                    <div class="col-4 border-bottom border-right border-left border-warning">
-                    </div>
-                    <div class="col-4 border-bottom border-left border-warning">
-                        X
-                    </div>
-                    <div class="col-4 border-bottom border-right border-top border-warning text-dark">
-                        N
-                    </div>
-                    <div class="col-4 border border-warning">
-                    </div>
-                    <div class="col-4 border-bottom border-top border-left border-warning">
-                    </div>
-                    <div class="col-4 border-right border-top border-warning text-dark">
-                        N
-                    </div>
-                    <div class="col-4 border-right border-top border-left border-warning">
-                        O
-                    </div>
-                    <div class="col-4 border-top border-left border-warning">
+                <div v-for="(gamerow, rowIndex) in gameboard" :key="rowIndex"
+                    class="row tiktaktoe">
+                    <div v-for="(gamecol, colIndex) in gamerow" :key="colIndex"
+                        :class="{'col-4 tiktaktoe-cell text-warning' : true,
+                        'tiktaktoe-cell-middle': rowIndex == 1}">
+                        <div>N</div>
                     </div>
                 </div>
             </div>
@@ -128,8 +111,19 @@
 <script>
 export default {
   name: 'App',
-  components: {
-  }
+  components: {    
+  },
+  data() {
+      return {
+          playerTurn: 1,
+
+          //   player: [{id: 1, symbol: 'X', victories: 0},{id: 1, symbol: 'O', victories: 0}],
+      gameboard: [
+          ['N','N','N'],
+          ['N','N','N'],
+          ['N','N','N']]
+      }
+  },
 }
 </script>
 
@@ -138,8 +132,18 @@ export default {
   width: 45%;
 }
 
-.text-tiktaktoe {
+.tiktaktoe {
   font-size: 6rem;
+}
+
+.tiktaktoe .tiktaktoe-cell:nth-of-type(2) {
+  border-right: solid 3px;
+  border-left: solid 3px;
+}
+
+.tiktaktoe .tiktaktoe-cell-middle {
+  border-top: solid 3px;
+  border-bottom: solid 3px;
 }
 
 .modal-dialog {
@@ -160,7 +164,7 @@ export default {
   .w-board {
     width: 90%;
   }
-  .text-tiktaktoe {
+  .tiktaktoe {
     font-size: 3rem;
   }
 }

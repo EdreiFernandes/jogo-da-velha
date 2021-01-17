@@ -18,7 +18,7 @@
                     <div v-for="(gamecol, colIndex) in gamerow" :key="colIndex"
                         :class="{'col-4 tiktaktoe-cell text-warning' : true,
                         'tiktaktoe-cell-middle': rowIndex == 1}">
-                        <div @click="makeMove(rowIndex, colIndex)">{{ gamecol }}</div>
+                        <div @click="makeMove(rowIndex, colIndex)" :class="{'empty-cell': gamecol == 'N'}">{{ gamecol }}</div>
                     </div>
                 </div>
             </div>
@@ -129,12 +129,42 @@ export default {
       makeMove(row, col) {
           if(this.gameboard[row][col] == 'N'){
               this.gameboard[row][col] = this.player[this.playerTurn - 1].symbol;
-              this.checkVictory();
+              if(this.checkVictory()){
+                  alert("Player " + this.playerTurn + " Ganhou");
+              }
               this.playerTurn = this.playerTurn == 1 ? 2 : 1;
           }
       },
       checkVictory(){
-          console.log("GG");
+          var hasWon = false;
+          for (let index = 0; index < 3; index++) {
+              // check row
+              if(this.gameboard[index][0] != 'N' && this.gameboard[index][1] != 'N' && this.gameboard[index][2] != 'N'){
+                  hasWon = this.gameboard[index][0] == this.gameboard[index][1] && this.gameboard[index][1] == this.gameboard[index][2];
+                  if(hasWon) return true;
+              }
+
+              // check column
+              if(this.gameboard[0][index] != 'N' && this.gameboard[1][index] != 'N' && this.gameboard[2][index] != 'N'){
+                  hasWon = this.gameboard[0][index] == this.gameboard[1][index] && this.gameboard[1][index] == this.gameboard[2][index];
+                  if(hasWon) return true;
+              }
+          }
+
+          if(this.gameboard[0][0] != 'N' && this.gameboard[1][1] != 'N'){
+              // check diagonal
+              if(this.gameboard[2][2] != 'N'){
+                  hasWon = this.gameboard[0][0] == this.gameboard[1][1] && this.gameboard[1][1] == this.gameboard[2][2];
+                  if(hasWon) return true;
+              }
+
+              // check inverted diagonal
+              if(this.gameboard[0][2] != 'N' && this.gameboard[2][0] != 'N'){
+                  hasWon = this.gameboard[0][2] == this.gameboard[1][1] && this.gameboard[1][1] == this.gameboard[2][0];
+                  if(hasWon) return true;
+              }
+          }          
+          return false;
       }
   },
 }
@@ -161,6 +191,10 @@ export default {
 
 .tiktaktoe .tiktaktoe-cell:hover {
   background-color: #2a2e33;
+}
+
+.empty-cell{
+    color: #2a2e3300;
 }
 
 .modal-dialog {

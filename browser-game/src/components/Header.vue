@@ -1,6 +1,6 @@
 <template>
     <div id="cabealho" class="row justify-content-between mb-5">
-        <a class="text-warning" data-toggle="modal" data-target="#placarModal" title="Placar">
+        <a class="text-warning" data-toggle="modal" data-target="#scoreboardModal" title="Placar">
             <i class="fas fa-trophy"></i>
         </a>
         <div class="text-warning">vez do<h2><b>Jogador {{ playerTurn }}</b></h2></div>

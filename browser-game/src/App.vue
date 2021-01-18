@@ -24,31 +24,8 @@
         </div>
     </div>
 
-    <div class="modal fade" data-backdrop="static" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content bg-warning">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-10">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Menu</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        
-                        <div class="modal-body">
-                            <button type="button" class="btn btn-outline-dark btn-block" data-dismiss="modal">Jogar</button>
-                            <button type="button" class="btn btn-outline-dark btn-block">Reiniciar</button>
-                            <button type="button" class="btn btn-outline-dark btn-block" data-dismiss="modal" data-toggle="modal" data-target="#placarModal">
-                                Placar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <modal-menu v-on:Restart="restartGame()"></modal-menu>
+    <modal-scoreboard :player="player"></modal-scoreboard>
   </div>
 </template>
 
@@ -56,6 +33,8 @@
 import Header from '@/components/Header.vue';
 import Result from '@/components/Result.vue';
 import Scoreboard from '@/components/Scoreboard.vue';
+import ScoreboardModal from '@/components/ScoreboardModal.vue';
+import MenuModal from '@/components/MenuModal.vue';
 
 export default {
   name: 'App',
@@ -63,6 +42,8 @@ export default {
       "app-header": Header,
       "app-result": Result,
       "app-scoreboard": Scoreboard,
+      "modal-scoreboard": ScoreboardModal,
+      "modal-menu": MenuModal
   },
   data() {
       return {
@@ -199,6 +180,20 @@ export default {
 
 .empty-cell{
     color: #2a2e3300;
+}
+
+.modal-dialog {
+  margin: 0;
+  max-width: 100%;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 0px;
+}
+
+.modal-header {
+  border: none;
 }
 
 @media only screen and (max-width: 600px) {

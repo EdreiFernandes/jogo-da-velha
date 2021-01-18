@@ -3,7 +3,7 @@
     <div class="position-absolute d-table w-100 h-100">
         <div class="d-table-cell align-middle">
             <div v-if="playing" id="gameboard" class="container w-board text-center">                
-                <Header :playerTurn="playerTurn"></Header>
+                <app-header :playerTurn="playerTurn"></app-header>
 
                 <div v-for="(gamerow, rowIndex) in gameboard" :key="rowIndex"
                     class="row tiktaktoe">
@@ -17,47 +17,8 @@
 
             <div v-else id="menu" class="bg-warning">
                 <div class="d-flex justify-content-center">
-                    <div class="row col-sm-7 my-5 justify-content-between">
-                        <h2 class="col-10 text-center">{{ result }}</h2>
-
-                        <button type="buttom" class="btn btn-warning col-1" @click="hideMenu()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" data-backdrop="static" id="placarModal" tabindex="-1" role="dialog"
-        aria-labelledby="placarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content bg-warning">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-10">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Placar</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Fechar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-    
-                        <div class="modal-body">
-                            <div class="row text-center">
-                                <div id="jogador-1" class="col-5">
-                                    <h4>Jogador 1</h4>
-                                    <h1>4</h1>
-                                    <h6>vitórias</h6>
-                                </div>
-                                <h2 class="col-2 mt-5"><b>X</b></h2>
-                                <div id="jogador-2" class="col-5">
-                                    <h4>Jogador 2</h4>
-                                    <h1>2</h1>
-                                    <h6>vitórias</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <app-result v-if="showingResult" :result="result" v-on:Close="showScoreboard()"></app-result>
+                    <app-scoreboard v-if="showingScore" :player="player" v-on:End="endGame()" v-on:Restart="restartGame()"></app-scoreboard>
                 </div>
             </div>
         </div>
@@ -93,21 +54,27 @@
 
 <script>
 import Header from '@/components/Header.vue';
+import Result from '@/components/Result.vue';
+import Scoreboard from '@/components/Scoreboard.vue';
 
 export default {
   name: 'App',
   components: {   
-      Header 
+      "app-header": Header,
+      "app-result": Result,
+      "app-scoreboard": Scoreboard,
   },
   data() {
       return {
-          playing: false,
+          playing: true,
+          showingResult: false,
+          showingScore: false,
           playerTurn: 1,
           result: "Deu velha!",
           gameboard: [
-          ['N','N','N'],
-          ['N','N','N'],
-          ['N','N','N']],
+              ['N','N','N'],
+              ['N','N','N'],
+              ['N','N','N']],
           player: [
               {symbol: 'X', victories: 0},
               {symbol: 'O', victories: 0}],
@@ -118,11 +85,10 @@ export default {
           if(this.gameboard[row][col] == 'N'){
               this.gameboard[row][col] = this.player[this.playerTurn - 1].symbol;
               if(this.checkVictory()){
-                  this.result = "Player " + this.playerTurn + " ganhou!";
-                  this.showMenu();
+                  this.writeScore();
               }else if(this.checkDraw()){
                   this.result = "Deu velha!";
-                  this.showMenu();
+                  this.showResult();
               } else {
                   this.playerTurn = this.playerTurn == 1 ? 2 : 1;
               }
@@ -144,9 +110,9 @@ export default {
               }
           }
 
-          if(this.gameboard[0][0] != 'N' && this.gameboard[1][1] != 'N'){
+          if(this.gameboard[1][1] != 'N'){
               // check diagonal
-              if(this.gameboard[2][2] != 'N'){
+              if(this.gameboard[2][2] != 'N' && this.gameboard[0][0] != 'N'){
                   hasWon = this.gameboard[0][0] == this.gameboard[1][1] && this.gameboard[1][1] == this.gameboard[2][2];
                   if(hasWon) return true;
               }
@@ -169,10 +135,39 @@ export default {
 
           return emptyCells == 0;
       },
-      showMenu(){
+      writeScore(){
+          this.result = "O Jogador " + this.playerTurn + " venceu!";
+          this.player[this.playerTurn - 1].victories++;
+          this.showResult();
+      },
+      restartGame(){
+          this.playerTurn = 1,
+          this.gameboard = [
+              ['N','N','N'],
+              ['N','N','N'],
+              ['N','N','N']];
+          this.hideMenu();
+      },
+      endGame(){
+          this.player = [
+              {symbol: 'X', victories: 0},
+              {symbol: 'O', victories: 0}];
+          this.result = "Obrigado por jogar";
+          this.showResult();
+      },
+      showResult(){
+          this.showingResult = true;
+          this.showingScore = false;
+          this.playing = false;
+      },
+      showScoreboard(){
+          this.showingResult = false;
+          this.showingScore = true;
           this.playing = false;
       },
       hideMenu(){
+          this.showingResult = false;
+          this.showingScore = false;
           this.playing = true;
       }
   },
